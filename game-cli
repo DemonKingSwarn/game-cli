@@ -16,4 +16,6 @@ curl -A "$agent" -sL "$page1" "$page2" "$page3" "$page4" | sed -nE 's_.*loc>([^<
 sel=$(fzf --reverse --height=35% < "$cache_dir/game.history")
 magnet=$(curl -A "$agent" -sL "$sel" | grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*")
 
+[ -z "$magnet" ] && printf "%s\n" "[!] Nothing to download" && exit 1
+
 aria2c -x 16 -s 16 $magnet --dir=$download_dir
