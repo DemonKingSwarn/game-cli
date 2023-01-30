@@ -1,0 +1,28 @@
+#+TITLE: GAME-CLI
+#+AUTHOR: DemonKingSwarn
+
+A cli tool to browse and download games. This tool scrapes the site [[https://fitgirl-repacks.site/][fitgirl-repacks]].
+
+* Table of Contents
+- [[#Install][Install]]
+  - [[#Linux and MacOS][Linux and MacOS]]
+- [[#Uninstall][Uninstall]]
+- [[#Dependencies][Dependencies]]
+
+
+* Install
+
+** Linux and MacOS
+ #+begin_src sh
+   $ curl -sL "https://github.com/demonkingswarn/game-cli/raw/master/game-cli" -o $HOME/.local/bin/game-cli
+   $ chmod +x $HOME/.local/bin/game-cli
+ #+end_src
+
+* Uninstall
+
+Just remove it from your $PATH.
+
+* Dependencies
+
+- fzf - selection menu
+- aria2c - download manager
