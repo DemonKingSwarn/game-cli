@@ -1,21 +1,25 @@
 #!/bin/sh
 
-page1="https://fitgirl-repacks.site/post-sitemap.xml"
-page2="https://fitgirl-repacks.site/post-sitemap2.xml"
-page3="https://fitgirl-repacks.site/post-sitemap3.xml"
-page4="https://fitgirl-repacks.site/post-sitemap4.xml"
+fitgirl_base_url="https://fitgirl-repacks.site"
 
 agent="Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0"
 
 download_dir="$HOME/Downloads"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-printf "%s\n" "fetching game links"
-curl -A "$agent" -sL "$page1" "$page2" "$page3" "$page4" | sed -nE 's_.*loc>([^<]*)</loc.*_\1_p' > $cache_dir/game.history
+source=$(echo "fitgirl\njohncena141" | fzf --layout=reverse)
 
-sel=$(fzf --reverse --height=35% < "$cache_dir/game.history")
-magnet=$(curl -A "$agent" -sL "$sel" | grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*")
+if [ "$source" = "fitgirl" ]; then
+
+    sel=$(curl -A "$agent" -sL "$fitgirl_base_url/post-sitemap.xml" "$fitgirl_base_url/post-sitemap2.xml" "$fitgirl_base_url/post-sitemap3.xml" "$fitgirl_base_url/post-sitemap4.xml" | sed -nE 's_.*loc>([^<]*)</loc.*_\1_p' | fzf --prompt="Search torrent: " --layout=reverse)
+    magnet=$(curl -A "$agent" -sL "$sel" | grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*")
+
+else
+
+    magnet=$(curl -s "https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json" -L | sed -nE 's|.*"name": "([^"]*)",.*"magnet": "([^"]*)",.*"size": "([^"]*)".*"seeds": "([^"]*)".*|\2\t\[S:\4,\3] \1|p' | fzf --prompt="Search torrent: " --layout=reverse --border --with-nth 2.. | cut -f1)
+
+fi
 
 [ -z "$magnet" ] && printf "%s\n" "[!] Nothing to download" && exit 1
 
-aria2c -x 16 -s 16 $magnet --dir=$download_dir
+aria2c -x 16 -s 16 "$magnet" --dir="$download_dir"
