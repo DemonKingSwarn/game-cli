@@ -5,11 +5,10 @@ fitgirl_base_url="https://fitgirl-repacks.site"
 agent="Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0"
 
 download_dir="$HOME/Downloads"
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-source=$(echo "fitgirl\njohncena141" | fzf --layout=reverse)
+sources=$(echo "fitgirl\njohncena141" | fzf --layout=reverse)
 
-if [ "$source" = "fitgirl" ]; then
+if [ "$sources" = "fitgirl" ]; then
 
     sel=$(curl -A "$agent" -sL "$fitgirl_base_url/post-sitemap.xml" "$fitgirl_base_url/post-sitemap2.xml" "$fitgirl_base_url/post-sitemap3.xml" "$fitgirl_base_url/post-sitemap4.xml" | sed -nE 's_.*loc>([^<]*)</loc.*_\1_p' | fzf --prompt="Search torrent: " --layout=reverse)
     magnet=$(curl -A "$agent" -sL "$sel" | grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*")
