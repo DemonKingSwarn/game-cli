@@ -1,7 +1,7 @@
 #+TITLE: GAME-CLI
 #+AUTHOR: DemonKingSwarn
 
-A cli tool to browse and download games. This tool scrapes fitgirl-repacks and johncena141's repacs.
+A cli tool to browse and download games. This tool scrapes fitgirl-repacks and johncena141's repacks.
 
 * Table of Contents
 - [[#Install][Install]]
